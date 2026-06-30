@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,7 +52,7 @@ const Navbar = () => {
             className="text-2xl md:hidden text-gray-300 hover:text-blue-600 transition duration-300"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <FaBars />
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
         {isMenuOpen && (
@@ -88,6 +88,8 @@ const Navbar = () => {
               >
                 Contact
               </a>
+            </li>
+            <li>
               <button className=" w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300 mt-2">
                 Login
               </button>
