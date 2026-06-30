@@ -1,0 +1,23 @@
+import React from "react";
+import ProductCard from "./ProductCard";
+
+const FeaturedProducts = () => {
+  return (
+    <section className="py-10 bg-gray-100">
+      <div className="max-w-7xl mx-auto px-8">
+        <h2 className="text-4xl font-bold text-center mb-12">
+          Featured Products
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <ProductCard />
+          <ProductCard />
+          <ProductCard />
+          <ProductCard />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedProducts;
