@@ -1,5 +1,6 @@
 import React from "react";
 import ProductCard from "./ProductCard";
+import products from "../data/products";
 
 const FeaturedProducts = () => {
   return (
@@ -10,10 +11,15 @@ const FeaturedProducts = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              img={product.image}
+              name={product.name}
+              category={product.category}
+              price={product.price}
+            />
+          ))}
         </div>
       </div>
     </section>
