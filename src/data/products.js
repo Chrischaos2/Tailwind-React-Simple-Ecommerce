@@ -14,6 +14,8 @@ const products = [
     image: Jacket,
     category: "Jackets",
     price: 80,
+    description:
+      "A stylish leather jacket made from high-quality materials. Perfect for casual and semi-formal occasions.",
   },
   {
     id: 2,
@@ -21,6 +23,8 @@ const products = [
     image: Wallet,
     category: "Accessories",
     price: 25,
+    description:
+      "A sleek and durable leather wallet with multiple compartments for cards and cash. Ideal for everyday use.",
   },
   {
     id: 3,
@@ -28,6 +32,8 @@ const products = [
     image: Watch,
     category: "Watches",
     price: 80,
+    description:
+      "The Apple Watch Series 6 is a smartwatch that combines fitness tracking, health monitoring, and connectivity features. It offers a range of apps and customizable watch faces.",
   },
   {
     id: 4,
@@ -35,6 +41,8 @@ const products = [
     image: Tablet,
     category: "Tablets",
     price: 150,
+    description:
+      "The Samsung Galaxy Tab is a versatile tablet with a large display and powerful performance. Perfect for work and entertainment.",
   },
   {
     id: 5,
@@ -42,6 +50,8 @@ const products = [
     image: Headphones,
     category: "Headphones",
     price: 200,
+    description:
+      "The Sony WH-1000XM4 is a premium pair of noise-canceling headphones with exceptional sound quality and comfort. Perfect for music lovers and professionals.",
   },
   {
     id: 6,
@@ -49,6 +59,8 @@ const products = [
     image: Hoodie,
     category: "Hoodies",
     price: 50,
+    description:
+      "A comfortable and versatile hoodie made from high-quality materials. Perfect for casual wear and layering.",
   },
   {
     id: 7,
@@ -56,14 +68,18 @@ const products = [
     name: "Nike Air Max 270",
     category: "Sneakers",
     price: 120,
+    description:
+      "The Nike Air Max 270 is a stylish and comfortable pair of sneakers with excellent cushioning and support. Perfect for everyday wear and athletic activities.",
   },
 
   {
     id: 8,
     image: Backpack,
     name: "Leather Backpack",
-    category: "Backpack",
+    category: "Backpacks",
     price: 25,
+    description:
+      "A stylish and durable leather backpack with multiple compartments for organization. Perfect for work, school, or travel.",
   },
 ];
 
