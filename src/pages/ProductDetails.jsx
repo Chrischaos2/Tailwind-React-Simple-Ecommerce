@@ -4,9 +4,16 @@ import products from "../data/products";
 import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
+
 const ProductDetails = () => {
   const { id } = useParams();
-  console.log(id);
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
+
   const product = products.find((product) => product.id === parseInt(id));
   if (!product) {
     return <h1>Product not found</h1>;
@@ -40,7 +47,10 @@ const ProductDetails = () => {
 
             <p className="text-gray-600 mb-6">{product.description}</p>
 
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            >
               Add to Cart
             </button>
           </div>
