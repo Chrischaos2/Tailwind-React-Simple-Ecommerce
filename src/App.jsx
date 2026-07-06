@@ -15,16 +15,18 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
+      <main className="pt-18">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </main>
     </div>
   );
 };

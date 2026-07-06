@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-700 px-8 py-4 shadow-md">
+    <nav className="fixed top-0 left-0 right-0 w-full z-50 bg-gray-700 px-8 py-4 shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link
