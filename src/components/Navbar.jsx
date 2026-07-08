@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full z-50 bg-gray-700 px-8 py-4 shadow-md">
@@ -60,6 +64,19 @@ const Navbar = () => {
               className="text-gray-300 hover:text-blue-600 transition"
             >
               Contact
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/cart"
+              className="relative text-gray-300 hover:text-blue-600 transition"
+            >
+              <FaShoppingCart className="text-2xl" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </li>
         </ul>
