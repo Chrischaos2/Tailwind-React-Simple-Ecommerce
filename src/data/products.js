@@ -12,7 +12,7 @@ const products = [
     id: 1,
     name: "Leather Jacket",
     image: Jacket,
-    category: "Jackets",
+    category: "Clothing",
     price: 80,
     description:
       "A stylish leather jacket made from high-quality materials. Perfect for casual and semi-formal occasions.",
@@ -30,7 +30,7 @@ const products = [
     id: 3,
     name: "Apple Watch Series 6",
     image: Watch,
-    category: "Watches",
+    category: "Accesories",
     price: 80,
     description:
       "The Apple Watch Series 6 is a smartwatch that combines fitness tracking, health monitoring, and connectivity features. It offers a range of apps and customizable watch faces.",
@@ -39,7 +39,7 @@ const products = [
     id: 4,
     name: "Samsung Galaxy Tab",
     image: Tablet,
-    category: "Tablets",
+    category: "Electronics",
     price: 150,
     description:
       "The Samsung Galaxy Tab is a versatile tablet with a large display and powerful performance. Perfect for work and entertainment.",
@@ -48,7 +48,7 @@ const products = [
     id: 5,
     name: "Sony WH-1000XM4",
     image: Headphones,
-    category: "Headphones",
+    category: "Electronics",
     price: 200,
     description:
       "The Sony WH-1000XM4 is a premium pair of noise-canceling headphones with exceptional sound quality and comfort. Perfect for music lovers and professionals.",
@@ -57,7 +57,7 @@ const products = [
     id: 6,
     name: "Versatile Hoodie",
     image: Hoodie,
-    category: "Hoodies",
+    category: "Clothing",
     price: 50,
     description:
       "A comfortable and versatile hoodie made from high-quality materials. Perfect for casual wear and layering.",
@@ -66,7 +66,7 @@ const products = [
     id: 7,
     image: Sneakers,
     name: "Nike Air Max 270",
-    category: "Sneakers",
+    category: "Shoes",
     price: 120,
     description:
       "The Nike Air Max 270 is a stylish and comfortable pair of sneakers with excellent cushioning and support. Perfect for everyday wear and athletic activities.",
@@ -76,7 +76,7 @@ const products = [
     id: 8,
     image: Backpack,
     name: "Leather Backpack",
-    category: "Backpacks",
+    category: "Bags",
     price: 25,
     description:
       "A stylish and durable leather backpack with multiple compartments for organization. Perfect for work, school, or travel.",
