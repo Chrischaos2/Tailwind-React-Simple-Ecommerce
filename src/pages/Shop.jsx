@@ -6,6 +6,7 @@ const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("featured");
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div className="flex flex-col items-center mb-10 mt-4">
@@ -16,7 +17,10 @@ const Shop = () => {
           type="text"
           placeholder="Search products..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1); // Reset to first page on search
+          }}
           className="w-full mb-2 pl-12 pr-4 py-3 bg-white border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
         />
       </div>
@@ -25,7 +29,10 @@ const Shop = () => {
           (category) => (
             <button
               key={category}
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => {
+                setSelectedCategory(category);
+                setCurrentPage(1); // Reset to first page on category change
+              }}
               className={`px-5 py-2 rounded-full font-medium transition ${
                 selectedCategory === category
                   ? "bg-blue-600 text-white"
@@ -40,7 +47,10 @@ const Shop = () => {
       <div className="w-full max-w-xs mb-6">
         <select
           value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
+          onChange={(e) => {
+            setSortOption(e.target.value);
+            setCurrentPage(1); // Reset to first page on sort change
+          }}
           className="w-48 px-2 py-2 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="featured">Featured</option>
@@ -54,6 +64,8 @@ const Shop = () => {
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}
         sortOption={sortOption}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
       />
     </div>
   );
