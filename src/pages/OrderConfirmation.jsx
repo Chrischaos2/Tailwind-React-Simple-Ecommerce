@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 
 const OrderConfirmation = () => {
   const location = useLocation();
-  const order = location.state?.order;
-  const orderNumber = `ORD-${Date.now()}`; // Generate a unique order number based on timestamp
+  const order =
+    location.state?.order || JSON.parse(localStorage.getItem("order"));
 
   return (
     <div className="max-w-4xl mx-auto px-8 py-16">
@@ -16,7 +16,18 @@ const OrderConfirmation = () => {
 
           <p className="text-gray-600">Thank you for your order.</p>
 
-          <p className="font-semibold mt-4">Order Number: {orderNumber}</p>
+          <p className="font-semibold mt-4">
+            Order Number: {order?.orderNumber}
+          </p>
+          <p className="text-gray-500 mt-2">
+            Date:{" "}
+            {order?.orderDate
+              ? new Date(order.orderDate).toLocaleString()
+              : "N/A"}
+          </p>
+          <p className="text-gray-500 mt-2">
+            Status: {order?.status || "Pending"}
+          </p>
         </div>
 
         {order && (

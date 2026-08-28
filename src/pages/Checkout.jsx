@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import { clearCart } from "../features/cart/cartSlice";
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
 
   const isCartEmpty = cartItems.length === 0;
   const navigate = useNavigate();
@@ -83,18 +86,32 @@ const Checkout = () => {
   };
 
   // Handle placing order
+
   const handlePlaceOrder = () => {
     if (!validateForm()) {
       return;
     }
+    const orderNumber = `ORD-${Date.now()}`; // Generate a unique order number based on timestamp
+    const orderDate = new Date().toISOString();
 
     const order = {
+      orderNumber,
+      orderDate,
+      status: "Pending",
       customer: formData,
       items: cartItems,
       subtotal,
       shippingCost,
       total,
     };
+    //store order in local storage
+    localStorage.setItem("order", JSON.stringify(order));
+    const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    existingOrders.push(order);
+    localStorage.setItem("orders", JSON.stringify(existingOrders));
+
+    // Clear the cart
+    dispatch(clearCart());
 
     console.log("Order:", order);
     // Navigate to order confirmation page

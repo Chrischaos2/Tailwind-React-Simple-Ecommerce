@@ -80,6 +80,13 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
+        {/*Orders Page Link */}
+        <Link
+          to="/orders"
+          className="hidden md:block text-gray-300 hover:text-blue-600 transition"
+        >
+          My Orders
+        </Link>
 
         {/* Login Button */}
         <Link
