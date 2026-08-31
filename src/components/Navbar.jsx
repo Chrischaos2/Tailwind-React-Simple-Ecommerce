@@ -80,6 +80,7 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
+
         {/*Orders Page Link */}
         <Link
           to="/orders"

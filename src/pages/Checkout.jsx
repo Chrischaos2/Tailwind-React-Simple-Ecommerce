@@ -106,6 +106,7 @@ const Checkout = () => {
     };
     //store order in local storage
     localStorage.setItem("order", JSON.stringify(order));
+
     const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
     existingOrders.push(order);
     localStorage.setItem("orders", JSON.stringify(existingOrders));
