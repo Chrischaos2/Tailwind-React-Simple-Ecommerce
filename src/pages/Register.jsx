@@ -1,6 +1,14 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaCheck,
+  FaCircle,
+} from "react-icons/fa";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -102,6 +110,15 @@ const Register = () => {
       return () => clearTimeout(timer);
     }
   }, [success]);
+
+  {
+    /*Password Strength*/
+  }
+  const hasMinLength = formData.password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(formData.password);
+  const hasLowerCase = /[a-z]/.test(formData.password);
+  const hasNumber = /[0-9]/.test(formData.password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-2 pb-8">
@@ -209,7 +226,7 @@ const Register = () => {
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowPassword((previous) => !previous)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -220,6 +237,29 @@ const Register = () => {
               <span className="text-red-500 text-sm">{errors.password}</span>
             )}
           </div>
+
+          {/*Display Password requirements*/}
+          {formData.password && (
+            <div className="mt-2 text-sm space-y-1">
+              <p className={hasMinLength ? "text-green-600" : "text-gray-500"}>
+                {hasMinLength ? <FaCheck /> : <FaCircle />} At least 8
+                Characters
+              </p>
+              <p className={hasUpperCase ? "text-green-600" : "text-gray-500"}>
+                {hasUpperCase ? <FaCheck /> : <FaCircle />} One Uppercase letter
+              </p>
+              <p className={hasLowerCase ? "text-green-600" : "text-gray-500"}>
+                {hasLowerCase ? <FaCheck /> : <FaCircle />} One lowercase letter
+              </p>
+              <p className={hasNumber ? "text-green-600" : "text-gray-500"}>
+                {hasNumber ? <FaCheck /> : <FaCircle />} Has one Number
+              </p>
+              <p className={hasSpecial ? "text-green-600" : "text-gray-500"}>
+                {hasNumber ? <FaCheck /> : <FaCircle />} Has one Special
+                character
+              </p>
+            </div>
+          )}
 
           {/* Confirm Password */}
           <div className="mt-4">
@@ -241,7 +281,7 @@ const Register = () => {
                 onClick={() => setShowConfirmPassword((previous) => !previous)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
 
