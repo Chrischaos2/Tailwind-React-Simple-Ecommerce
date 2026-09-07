@@ -35,12 +35,46 @@ const Register = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: "" });
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const nameRegex = /^[A-Za-z]+$/;
+
+  // Password Strength
+  const hasMinLength = formData.password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(formData.password);
+  const hasLowerCase = /[a-z]/.test(formData.password);
+  const hasNumber = /[0-9]/.test(formData.password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
+
+  const passwordChecks = [
+    hasMinLength,
+    hasLowerCase,
+    hasNumber,
+    hasUpperCase,
+    hasSpecial,
+  ];
+
+  const passedChecks = passwordChecks.filter(Boolean).length;
+
+  let passwordStrength = "";
+
+  if (passedChecks <= 2) {
+    passwordStrength = "Weak";
+  } else if (passedChecks <= 4) {
+    passwordStrength = "Medium";
+  } else {
+    passwordStrength = "Strong";
+  }
 
   const validateForm = () => {
     const newErrors = {
@@ -97,6 +131,15 @@ const Register = () => {
     e.preventDefault();
 
     if (validateForm()) {
+      const user = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      };
+
+      localStorage.setItem("registeredUser", JSON.stringify(user));
+
       setSuccess(true);
     }
   };
@@ -110,15 +153,6 @@ const Register = () => {
       return () => clearTimeout(timer);
     }
   }, [success]);
-
-  {
-    /*Password Strength*/
-  }
-  const hasMinLength = formData.password.length >= 8;
-  const hasUpperCase = /[A-Z]/.test(formData.password);
-  const hasLowerCase = /[a-z]/.test(formData.password);
-  const hasNumber = /[0-9]/.test(formData.password);
-  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-2 pb-8">
@@ -224,6 +258,7 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleInputChange}
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword((previous) => !previous)}
@@ -238,27 +273,63 @@ const Register = () => {
             )}
           </div>
 
-          {/*Display Password requirements*/}
+          {/* Password Requirements */}
           {formData.password && (
             <div className="mt-2 text-sm space-y-1">
               <p className={hasMinLength ? "text-green-600" : "text-gray-500"}>
                 {hasMinLength ? <FaCheck /> : <FaCircle />} At least 8
                 Characters
               </p>
+
               <p className={hasUpperCase ? "text-green-600" : "text-gray-500"}>
                 {hasUpperCase ? <FaCheck /> : <FaCircle />} One Uppercase letter
               </p>
+
               <p className={hasLowerCase ? "text-green-600" : "text-gray-500"}>
                 {hasLowerCase ? <FaCheck /> : <FaCircle />} One lowercase letter
               </p>
+
               <p className={hasNumber ? "text-green-600" : "text-gray-500"}>
                 {hasNumber ? <FaCheck /> : <FaCircle />} Has one Number
               </p>
+
               <p className={hasSpecial ? "text-green-600" : "text-gray-500"}>
-                {hasNumber ? <FaCheck /> : <FaCircle />} Has one Special
+                {hasSpecial ? <FaCheck /> : <FaCircle />} Has one Special
                 character
               </p>
             </div>
+          )}
+
+          {/* Password Strength */}
+          {formData.password && (
+            <>
+              <p
+                className={
+                  passwordStrength === "Strong"
+                    ? "text-green-600"
+                    : passwordStrength === "Medium"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                }
+              >
+                Password Strength: {passwordStrength}
+              </p>
+
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    passwordStrength === "Strong"
+                      ? "bg-green-600"
+                      : passwordStrength === "Medium"
+                        ? "bg-yellow-500"
+                        : "bg-red-500"
+                  }`}
+                  style={{
+                    width: `${(passedChecks / 5) * 100}%`,
+                  }}
+                ></div>
+              </div>
+            </>
           )}
 
           {/* Confirm Password */}
@@ -276,6 +347,7 @@ const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
               />
+
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword((previous) => !previous)}
