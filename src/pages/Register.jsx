@@ -9,8 +9,10 @@ import {
   FaCheck,
   FaCircle,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -141,6 +143,12 @@ const Register = () => {
       localStorage.setItem("registeredUser", JSON.stringify(user));
 
       setSuccess(true);
+      console.log("Registration Successful");
+      console.log("Navigating to Login");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     }
   };
 

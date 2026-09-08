@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -6,6 +6,24 @@ import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true",
+  );
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("registeredUser")),
+  );
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setIsLoggedIn(localStorage.getItem("isLoggedIn")) === "true";
+      setUser(JSON.parse(localStorage.getItem("registeredUser")));
+    };
+    window.addEventListener("authChange", handleAuthChange);
+
+    return () => {
+      window.removeEventListener("authChange", handleAuthChange);
+    };
+  }, []);
   const cartItems = useSelector((state) => state.cart.items);
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
@@ -89,13 +107,48 @@ const Navbar = () => {
           My Orders
         </Link>
 
-        {/* Login Button */}
-        <Link
-          to="/login"
-          className="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
-        >
-          Login
-        </Link>
+        {/**Desktop Authentification */}
+        {!isLoggedIn ? (
+          <>
+            {/* Login Button */}
+            <Link
+              to="/login"
+              className="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+            >
+              Login
+            </Link>
+
+            {/*Register Button */}
+            <Link
+              to="/register"
+              className="hidden md:block border green-blue-500 text-green-600 px-4 py-2 rounded-xl hover:bg-green-500 hover:text-white transition"
+            >
+              Register
+            </Link>
+          </>
+        ) : (
+          <>
+            <span className="hidden md:flex items-center gap-2 text-gray-200 bg-gray-600 px-3 py-2 rounded-xl">
+              <span className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
+                {user?.firstName?.charAt(0).toUpperCase()}
+              </span>
+
+              <span className="text-sm">
+                Hi, <span className="font-semibold">{user?.firstName}</span>
+              </span>
+            </span>
+            <button
+              onClick={() => {
+                localStorage.removeItem("isLoggedIn");
+                setIsLoggedIn(false);
+                window.dispatchEvent(new Event("authChange"));
+              }}
+              className="hidden md:block bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          </>
+        )}
 
         {/* Mobile Menu Button */}
         <button
@@ -118,7 +171,6 @@ const Navbar = () => {
               Home
             </Link>
           </li>
-
           <li>
             <Link
               to="/shop"
@@ -128,7 +180,6 @@ const Navbar = () => {
               Shop
             </Link>
           </li>
-
           <li>
             <Link
               to="/cart"
@@ -138,7 +189,6 @@ const Navbar = () => {
               Cart
             </Link>
           </li>
-
           <li>
             <Link
               to="/about"
@@ -148,7 +198,6 @@ const Navbar = () => {
               About
             </Link>
           </li>
-
           <li>
             <Link
               to="/contact"
@@ -158,16 +207,42 @@ const Navbar = () => {
               Contact
             </Link>
           </li>
+          {!isLoggedIn ? (
+            <>
+              <li>
+                <Link
+                  to="/login"
+                  className="block w-fit mx-auto bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition text-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Link>
+              </li>
 
-          <li>
-            <Link
-              to="/login"
-              className="block w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Login
-            </Link>
-          </li>
+              <li>
+                <Link
+                  to="/register"
+                  className="block w-fit mx-auto border border-green-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-green-600 hover:text-white transition text-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </li>
+            </>
+          ) : (
+            <li>
+              <button
+                onClick={() => {
+                  localStorage.removeItem("isLoggedIn");
+                  setIsLoggedIn(false);
+                  setIsMenuOpen(false);
+                }}
+                className="block w-40 mx-auto bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition text-center"
+              >
+                Logout
+              </button>
+            </li>
+          )}
         </ul>
       )}
     </nav>

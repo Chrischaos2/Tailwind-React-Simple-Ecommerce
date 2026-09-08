@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,6 +43,10 @@ const Login = () => {
 
     setError("");
     console.log("Login successful");
+
+    localStorage.setItem("isLoggedIn", "true");
+    window.dispatchEvent(new Event("authChange"));
+    navigate("/");
   };
 
   return (
