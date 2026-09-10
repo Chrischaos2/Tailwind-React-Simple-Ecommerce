@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from "react";
+
 import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true",
   );
+
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("registeredUser")),
   );
 
   useEffect(() => {
     const handleAuthChange = () => {
-      setIsLoggedIn(localStorage.getItem("isLoggedIn")) === "true";
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+
       setUser(JSON.parse(localStorage.getItem("registeredUser")));
     };
+
     window.addEventListener("authChange", handleAuthChange);
 
     return () => {
       window.removeEventListener("authChange", handleAuthChange);
     };
   }, []);
+
   const cartItems = useSelector((state) => state.cart.items);
+
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -84,12 +94,14 @@ const Navbar = () => {
               Contact
             </Link>
           </li>
+
           <li>
             <Link
               to="/cart"
               className="relative text-gray-300 hover:text-blue-600 transition"
             >
               <FaShoppingCart className="text-2xl" />
+
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartCount}
@@ -99,7 +111,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/*Orders Page Link */}
+        {/* Orders Page Link */}
         <Link
           to="/orders"
           className="hidden md:block text-gray-300 hover:text-blue-600 transition"
@@ -107,7 +119,7 @@ const Navbar = () => {
           My Orders
         </Link>
 
-        {/**Desktop Authentification */}
+        {/* Desktop Authentication */}
         {!isLoggedIn ? (
           <>
             {/* Login Button */}
@@ -118,16 +130,17 @@ const Navbar = () => {
               Login
             </Link>
 
-            {/*Register Button */}
+            {/* Register Button */}
             <Link
               to="/register"
-              className="hidden md:block border green-blue-500 text-green-600 px-4 py-2 rounded-xl hover:bg-green-500 hover:text-white transition"
+              className="hidden md:block border border-green-500 text-green-600 px-4 py-2 rounded-xl hover:bg-green-500 hover:text-white transition"
             >
               Register
             </Link>
           </>
         ) : (
           <>
+            {/* User Profile */}
             <span className="hidden md:flex items-center gap-2 text-gray-200 bg-gray-600 px-3 py-2 rounded-xl">
               <span className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
                 {user?.firstName?.charAt(0).toUpperCase()}
@@ -137,11 +150,19 @@ const Navbar = () => {
                 Hi, <span className="font-semibold">{user?.firstName}</span>
               </span>
             </span>
+
+            {/* Logout Button */}
             <button
               onClick={() => {
                 localStorage.removeItem("isLoggedIn");
+
                 setIsLoggedIn(false);
+
+                setIsMenuOpen(false);
+
                 window.dispatchEvent(new Event("authChange"));
+
+                navigate("/login");
               }}
               className="hidden md:block bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition"
             >
@@ -171,6 +192,7 @@ const Navbar = () => {
               Home
             </Link>
           </li>
+
           <li>
             <Link
               to="/shop"
@@ -180,6 +202,7 @@ const Navbar = () => {
               Shop
             </Link>
           </li>
+
           <li>
             <Link
               to="/cart"
@@ -189,6 +212,7 @@ const Navbar = () => {
               Cart
             </Link>
           </li>
+
           <li>
             <Link
               to="/about"
@@ -198,6 +222,7 @@ const Navbar = () => {
               About
             </Link>
           </li>
+
           <li>
             <Link
               to="/contact"
@@ -207,8 +232,10 @@ const Navbar = () => {
               Contact
             </Link>
           </li>
+
           {!isLoggedIn ? (
             <>
+              {/* Mobile Login */}
               <li>
                 <Link
                   to="/login"
@@ -219,6 +246,7 @@ const Navbar = () => {
                 </Link>
               </li>
 
+              {/* Mobile Register */}
               <li>
                 <Link
                   to="/register"
@@ -230,18 +258,40 @@ const Navbar = () => {
               </li>
             </>
           ) : (
-            <li>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("isLoggedIn");
-                  setIsLoggedIn(false);
-                  setIsMenuOpen(false);
-                }}
-                className="block w-40 mx-auto bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition text-center"
-              >
-                Logout
-              </button>
-            </li>
+            <>
+              {/* Mobile User Profile */}
+              <li>
+                <div className="flex items-center justify-center gap-2 text-gray-200 bg-gray-600 px-4 py-2 rounded-xl w-fit mx-auto">
+                  <span className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
+                    {user?.firstName?.charAt(0).toUpperCase()}
+                  </span>
+
+                  <span className="text-sm">
+                    Hi, <span className="font-semibold">{user?.firstName}</span>
+                  </span>
+                </div>
+              </li>
+
+              {/* Mobile Logout */}
+              <li>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("isLoggedIn");
+
+                    setIsLoggedIn(false);
+
+                    setIsMenuOpen(false);
+
+                    window.dispatchEvent(new Event("authChange"));
+
+                    navigate("/login");
+                  }}
+                  className="block w-40 mx-auto bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition text-center"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
           )}
         </ul>
       )}

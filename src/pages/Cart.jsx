@@ -1,5 +1,7 @@
 import React from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   increaseQuantity,
   decreaseQuantity,
@@ -9,6 +11,7 @@ import {
 
 const Cart = () => {
   const dispatch = useDispatch();
+
   const cartItems = useSelector((state) => state.cart.items);
 
   const total = cartItems.reduce(
@@ -31,13 +34,14 @@ const Cart = () => {
           </div>
         ) : (
           <>
+            {/* Cart Items */}
             <div className="space-y-3">
               {cartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-lg shadow-sm border px-2 py-2 flex items-center gap-8"
+                  className="bg-white rounded-lg shadow-sm border px-3 py-3 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8"
                 >
-                  {/* Left */}
+                  {/* Product Information */}
                   <div className="flex-1">
                     <h2 className="font-semibold text-base">{item.name}</h2>
 
@@ -48,8 +52,8 @@ const Cart = () => {
                     </p>
                   </div>
 
-                  {/* Middle */}
-                  <div className="flex items-center gap-3">
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-3 self-start sm:self-auto">
                     <button
                       onClick={() => dispatch(decreaseQuantity(item.id))}
                       className="w-7 h-7 text-sm rounded bg-red-500 text-white hover:bg-red-600"
@@ -69,8 +73,8 @@ const Cart = () => {
                     </button>
                   </div>
 
-                  {/* Right */}
-                  <div className="ml-8">
+                  {/* Remove Button */}
+                  <div className="sm:ml-8">
                     <button
                       onClick={() => dispatch(removeFromCart(item.id))}
                       className="bg-gray-700 hover:bg-gray-800 text-white px-2 py-1.5 text-sm rounded-lg"
@@ -82,9 +86,8 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* Footer */}
-
-            <div className="bg-white shadow rounded-lg mt-6 p-5 flex items-center justify-between">
+            {/* Cart Footer */}
+            <div className="bg-white shadow rounded-lg mt-6 p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold">Total: ${total}</h2>
 
