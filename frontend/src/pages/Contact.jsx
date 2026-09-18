@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -14,6 +15,9 @@ const Contact = () => {
   const [messageError, setMessageError] = useState("");
 
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
   useEffect(() => {
     if (!success) return;
 
@@ -23,7 +27,7 @@ const Contact = () => {
     return () => clearTimeout(timer);
   }, [success]);
 
-  const handlesubmit = (e) => {
+  const handlesubmit = async (e) => {
     e.preventDefault();
     {
       /*Name Validation */
@@ -69,16 +73,30 @@ const Contact = () => {
     setMessageError("");
     const cleanedMessage = message.trim();
 
-    console.log("Name:", cleanedName);
-    console.log("Email:", cleanedEmail);
-    console.log("Subject:", cleanedSubject);
-    console.log("Message:", cleanedMessage);
+    setError("");
+    setLoading(true);
 
-    setSuccess(true);
-    setName("");
-    setEmail("");
-    setMessage("");
-    setSubject("");
+    try {
+      const response = await axios.post("http://localhost:5000/api/contact", {
+        name: cleanedName,
+        email: cleanedEmail,
+        subject: cleanedSubject,
+        message: cleanedMessage,
+      });
+
+      console.log(response.data);
+
+      setSuccess(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+      setSubject("");
+    } catch (error) {
+      console.error(error);
+      setError("Unable to send your message.Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -115,6 +133,7 @@ const Contact = () => {
                     setName(e.target.value);
                     setNameError("");
                     setSuccess(false);
+                    setError("");
                   }}
                   className={`w-full rounded-lg border px-4 py-3 text-gray-900 placeholder-gray-400 outline-none transition ${
                     nameError
@@ -145,6 +164,7 @@ const Contact = () => {
                   onChange={(e) => {
                     setEmail(e.target.value);
                     setSuccess(false);
+                    setError("");
                     setEmailError("");
                   }}
                   className={`w-full rounded-lg border px-4 py-3 text-gray-900 placeholder-gray-400 outline-none transition ${
@@ -177,6 +197,7 @@ const Contact = () => {
                   value={subject}
                   onChange={(e) => {
                     setSubject(e.target.value);
+                    setError("");
                     setSuccess(false);
                     setSubjectError("");
                   }}
@@ -208,6 +229,7 @@ const Contact = () => {
                   onChange={(e) => {
                     setMessage(e.target.value);
                     setSuccess(false);
+                    setError("");
                     setMessageError("");
                   }}
                   rows="5"
@@ -218,7 +240,7 @@ const Contact = () => {
                       : "border-gray-300 focus:border-blue-500  focus:ring-2 focus:ring-blue-100"
                   }`}
                 />
-                <div className="flex flex-end">
+                <div className="flex justify-end">
                   <span className="text-xs text-gray-500">
                     {message.length}/500
                   </span>
@@ -232,15 +254,16 @@ const Contact = () => {
               {/*Submit Button */}
               <button
                 type="submit"
-                className="w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                disabled={loading}
+                className="w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </div>
 
             {success && (
               <div
-                className="fixed top-6 right-6 z-50 w-80 overflow-hidden rounded-lg bg-green-600 shadow-lg animate-[slideIn_0.3s_ease-out]"
+                className="fixed m-8 top-14 right-2 z-50 w-80  overflow-hidden rounded-lg bg-green-600 shadow-lg animate-[slideIn_0.3s_ease-out]"
                 role="status"
               >
                 <div className="px-4 py-3 text-sm text-white">
@@ -250,6 +273,14 @@ const Contact = () => {
                 <div className="h-0.5 bg-green-600">
                   <div className="h-full bg-white animate-[shrink_5s_linear_forwards]" />
                 </div>
+              </div>
+            )}
+            {error && (
+              <div
+                className="fixed m-8 top-14 right-2 z-50 w-80 overflow-hidden rounded-lg bg-red-600 shadow-lg"
+                role="alert"
+              >
+                <div className="px-4 py-3 text-sm text-white">{error}</div>
               </div>
             )}
           </form>
