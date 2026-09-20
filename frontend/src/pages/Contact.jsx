@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -77,7 +78,7 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/contact", {
+      const response = await axios.post(`${API_URL}/api/contact`, {
         name: cleanedName,
         email: cleanedEmail,
         subject: cleanedSubject,
@@ -93,7 +94,10 @@ const Contact = () => {
       setSubject("");
     } catch (error) {
       console.error(error);
-      setError("Unable to send your message.Please try again.");
+      setError(
+        error.response?.data?.message ||
+          "Unable to send your message. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
