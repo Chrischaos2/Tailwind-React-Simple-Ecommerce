@@ -17,6 +17,27 @@ const createContact = async (req, res) => {
         message: "Please provide a valid email address",
       });
     }
+    if (cleanedEmail.length > 254) {
+      return res.status(400).json({
+        message: "Email cannot exceed 254 characters",
+      });
+    }
+    if (cleanedMessage.length > 500) {
+      return res.status(400).json({
+        message: "Message cannot exceed 500 characters",
+      });
+    }
+    if (cleanedName.length > 100) {
+      return res.status(400).json({
+        message: "Name cannot exceed 100 characters",
+      });
+    }
+
+    if (cleanedSubject.length > 150) {
+      return res.status(400).json({
+        message: "Subject cannot exceed 150 characters",
+      });
+    }
     const contact = await Contact.create({
       name: cleanedName,
       email: cleanedEmail,
