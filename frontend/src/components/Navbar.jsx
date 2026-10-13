@@ -6,24 +6,22 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
+import { getCurrentUser } from "../services/authService";
+
 const Navbar = () => {
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "true",
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("registeredUser")),
-  );
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   useEffect(() => {
     const handleAuthChange = () => {
-      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      setIsLoggedIn(localStorage.getItem("token"));
 
-      setUser(JSON.parse(localStorage.getItem("registeredUser")));
+      setUser(JSON.parse(localStorage.getItem("user")));
     };
 
     window.addEventListener("authChange", handleAuthChange);
@@ -143,18 +141,19 @@ const Navbar = () => {
             {/* User Profile */}
             <span className="hidden md:flex items-center gap-2 text-gray-200 bg-gray-600 px-3 py-2 rounded-xl">
               <span className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
-                {user?.firstName?.charAt(0).toUpperCase()}
+                {user?.name?.charAt(0).toUpperCase()}
               </span>
 
               <span className="text-sm">
-                Hi, <span className="font-semibold">{user?.firstName}</span>
+                Hi, <span className="font-semibold">{user?.name}</span>
               </span>
             </span>
 
             {/* Logout Button */}
             <button
               onClick={() => {
-                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
 
                 setIsLoggedIn(false);
 
@@ -263,11 +262,11 @@ const Navbar = () => {
               <li>
                 <div className="flex items-center justify-center gap-2 text-gray-200 bg-gray-600 px-4 py-2 rounded-xl w-fit mx-auto">
                   <span className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
-                    {user?.firstName?.charAt(0).toUpperCase()}
+                    {user?.name?.charAt(0).toUpperCase()}
                   </span>
 
                   <span className="text-sm">
-                    Hi, <span className="font-semibold">{user?.firstName}</span>
+                    Hi, <span className="font-semibold">{user?.name}</span>
                   </span>
                 </div>
               </li>
@@ -276,7 +275,8 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={() => {
-                    localStorage.removeItem("isLoggedIn");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
 
                     setIsLoggedIn(false);
 

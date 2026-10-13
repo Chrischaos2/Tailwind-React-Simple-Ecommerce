@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
-    //check requireed fields
-    if (!name || !email || !password || !confirmPassword) {
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    //check required fields
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(400).json({
         message: "Please fill in all the fields",
       });
@@ -32,7 +32,7 @@ const registerUser = async (req, res) => {
 
     //create user
     const user = await User.create({
-      name,
+      name: `${firstName} ${lastName}`,
       email,
       password: hashedPassword,
     });
@@ -86,6 +86,8 @@ const loginUser = async (req, res) => {
         expiresIn: "7d",
       },
     );
+    console.log("LOGIN TOKEN LENGTH:", token.length);
+    console.log("LOGIN TOKEN PARTS:", token.split(".").length);
     res.status(200).json({
       message: "Login successful",
       token,
@@ -102,4 +104,25 @@ const loginUser = async (req, res) => {
     });
   }
 };
-module.exports = { registerUser, loginUser };
+const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.error("Get user error:", error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+module.exports = { registerUser, loginUser, getMe };

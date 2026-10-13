@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { clearCart } from "../features/cart/cartSlice";
+import { getCurrentUser } from "../services/authService";
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -10,6 +11,18 @@ const Checkout = () => {
 
   const isCartEmpty = cartItems.length === 0;
   const navigate = useNavigate();
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const data = await getCurrentUser();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Failed to load user:", error);
+      }
+    };
+
+    loadUser();
+  }, []);
 
   // Calculate subtotal
   const subtotal = cartItems.reduce(
@@ -39,6 +52,7 @@ const Checkout = () => {
 
   // Validation errors
   const [errors, setErrors] = useState({});
+  const [user, setUser] = useState(null);
 
   // Validate checkout form
   const validateForm = () => {
@@ -98,6 +112,7 @@ const Checkout = () => {
       orderNumber,
       orderDate,
       status: "Pending",
+      userId: user._id,
       customer: formData,
       items: cartItems,
       subtotal,
@@ -107,9 +122,10 @@ const Checkout = () => {
     //store order in local storage
     localStorage.setItem("order", JSON.stringify(order));
 
-    const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    const existingOrders =
+      JSON.parse(localStorage.getItem(`orders_${user._id}`)) || [];
     existingOrders.push(order);
-    localStorage.setItem("orders", JSON.stringify(existingOrders));
+    localStorage.setItem(`orders_${user._id}`, JSON.stringify(existingOrders));
 
     // Clear the cart
     dispatch(clearCart());

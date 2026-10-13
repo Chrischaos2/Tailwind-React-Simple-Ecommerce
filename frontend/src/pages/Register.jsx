@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { registerUser } from "../services/authService";
 
 import {
   FaUser,
@@ -129,26 +130,31 @@ const Register = () => {
     return Object.values(newErrors).every((error) => error === "");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      const user = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-      };
+    if (!validateForm()) {
+      return;
+    }
 
-      localStorage.setItem("registeredUser", JSON.stringify(user));
+    try {
+      const data = await registerUser(formData);
 
       setSuccess(true);
+
       console.log("Registration Successful");
-      console.log("Navigating to Login");
+      console.log(data);
 
       setTimeout(() => {
         navigate("/login");
       }, 1500);
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      setErrors({
+        ...errors,
+        email: error.message,
+      });
     }
   };
 

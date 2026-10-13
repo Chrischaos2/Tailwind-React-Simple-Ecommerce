@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCurrentUser } from "../services/authService";
 
 const Orders = () => {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const data = await getCurrentUser();
+        const userId = data.user._id;
+
+        const userOrders =
+          JSON.parse(localStorage.getItem(`orders_${userId}`)) || [];
+
+        setOrders(userOrders);
+      } catch (error) {
+        console.error("Failed to load orders:", error);
+      }
+    };
+
+    loadOrders();
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-8 py-10">

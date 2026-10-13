@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
+import { loginUser } from "../services/authService";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -19,34 +20,27 @@ const Login = () => {
       return;
     }
 
-    const storedUser = localStorage.getItem("registeredUser");
+    try {
+      const data = await loginUser({
+        email,
+        password,
+      });
 
-    console.log("Stored user:", storedUser);
+      setError("");
 
-    if (!storedUser) {
-      setError("No registered account found");
-      return;
+      console.log("Login successful");
+      console.log("User:", data.user);
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      window.dispatchEvent(new Event("authChange"));
+
+      navigate("/");
+    } catch (error) {
+      console.error("Login error:", error);
+      setError(error.message);
     }
-
-    const registeredUser = JSON.parse(storedUser);
-
-    console.log("Registered user object:", registeredUser);
-    console.log("Entered email:", email);
-    console.log("Entered password:", password);
-    if (
-      email !== registeredUser.email ||
-      password !== registeredUser.password
-    ) {
-      setError("Invalid email or password");
-      return;
-    }
-
-    setError("");
-    console.log("Login successful");
-
-    localStorage.setItem("isLoggedIn", "true");
-    window.dispatchEvent(new Event("authChange"));
-    navigate("/");
   };
 
   return (
